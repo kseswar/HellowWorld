@@ -7,20 +7,38 @@ pipeline {
 	        checkout scm
 	        }
 	   }
-	   stage('Build Image') {
+	   stage('Build Docker Image') {
 	        steps {
-	        sh 'docker build -t helloworld:v1 .'
+				script {
+				 app = docker.build('payalsasmal/hellodocker')
+				 app.inside{
+					sh 'echo $(curl localhost:8888)'
+				 }
+				}
 	        }
 	   }
 	   stage('Run Image') {
 	        steps {
-	        sh 'docker run -d -p 5000:5000 --name helloworldpip helloworld:v1'
+	        sh 'docker run -d -p 5000:5000 --name hellodocker hellodocker:v1'
 	        }
 	   }
+	   
 	   stage('Testing'){
 	        steps {
 	            echo 'Testing..'
 	            }
+	   }
+	   
+	   stage('Push Docker image') {
+	        steps {
+                script {
+				    docker.withRegistry('https://registry.hub.docker.com', 'DockerHub') {
+					    app.push("${env.BUILD_NUMBER}")
+						app.push("latest")
+					}
+				}	   
+	        }
+	   
 	   }
     }
 }
