@@ -31,7 +31,7 @@ pipeline {
 	   
 	   stage('Push Docker image') {
 	        steps {
-		sh 'withCredentials([string(credentialsId: 'dockerHubaccount', variable: 'dockerHubaccount')]){
+		sh 'withCredentials([string(credentialsId: 'dockerHubaccount', variable: 'dockerHubaccount')]) {
 		sh 'docker login -u payalsasmal -p ${dockerhubaccount}'
 		}
 		script {
