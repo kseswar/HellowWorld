@@ -24,11 +24,15 @@ pipeline {
 	   }
 	   
 	   stage('Push Docker image') {
-		
-		    withCredentials([string(credentialsId: ‘dockerhubaccount’, variable: ‘dockerhubaccount’)]) {
+		   steps {
+		   	withCredentials([string(credentialsId: ‘dockerhubaccount’, variable: ‘dockerhubaccount’)]) {
 				sh 'docker login -u payalsasmal -p ${dockerhubaccount}'
+				sh 'docker push helloworld:v1'
 			}
-				sh ‘docker push helloworld:v1’
-		}
+				
+		   }
+		
+		    
+	   }
     }
 }
