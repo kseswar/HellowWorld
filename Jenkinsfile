@@ -1,38 +1,47 @@
 pipeline {
+    environment {
+    registry = "payalsasmal/1strepository"
+    registryCredential = 'DockerHub'
+	}
 	agent any
 	    stages {
 	        stage('Clone Repository') {
-	        /* Cloning the repository to our workspace */
 	        steps {
 	        checkout scm
 	        }
 	   }
-	   stage('Build Image') {
+	   stage('Build Docker Image') {
 	        steps {
-	        sh 'docker build -t helloworld:v1 .'
+				script {
+				 app = docker.build('payalsasmal/hellodocker')
+				 app.inside {
+					sh 'echo $(curl localhost:8888)'
+				 }
+				}
 	        }
 	   }
 	   stage('Run Image') {
 	        steps {
-	        sh 'docker run -d -p 5000:5000 --name helloworldpip helloworld:v1'
+	        sh 'docker run -d -p 5000:5000 --name hellodocker hellodocker:v1'
 	        }
 	   }
-	   stage('Testing'){
+	   
+	   stage('Testing') {
 	        steps {
 	            echo 'Testing..'
 	            }
 	   }
 	   
 	   stage('Push Docker image') {
-		   steps {
-		   	withCredentials([string(credentialsId: ‘dockerhubaccount’, variable: ‘dockerhubaccount’)]) {
-				sh 'docker login -u payalsasmal -p ${dockerhubaccount}'
-				sh 'docker push helloworld:v1'
-			}
-				
-		   }
-		
-		    
+	        steps {
+                   script {
+		      docker.withRegistry('', 'DockerHub') {
+			     app.push("${env.BUILD_NUMBER}")
+			     app.push("latest")
+			   }
+			}	   
+	        }
+	   
 	   }
     }
 }
