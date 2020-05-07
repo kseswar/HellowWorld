@@ -31,8 +31,10 @@ pipeline {
 	   
 	   stage('Push Docker image') {
 	        steps {
-                script {
-		    docker.withRegistry('https://hub.docker.com', 'DockerHub') {
+		sh 'withCredentials([string(credentialsId: 'dockerHubaccount', variable: 'dockerHubaccount')]){
+		sh 'docker login -u payalsasmal -p ${dockerhubaccount}'
+		}
+		script {
 			 app.push("${env.BUILD_NUMBER}")
 			 app.push("latest")
 			}
