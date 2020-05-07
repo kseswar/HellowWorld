@@ -22,7 +22,7 @@ pipeline {
 	   }
 	   stage('Run Image') {
 	        steps {
-	        sh 'docker run -d -p 5000:5000 --name hellodocker hellodocker:v1'
+	        sh 'docker run -d -p 5000:5000 --name hellodocker payalsasmalhellodocker'
 	        }
 	   }
 	   
