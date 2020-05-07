@@ -10,16 +10,16 @@ pipeline {
 	   stage('Build Docker Image') {
 	        steps {
 				script {
-				 app = docker.build('payalsasmal/hellodocker')
+				 app = docker.build('hellodocker')
 				 app.inside{
-					sh 'echo $(curl localhost:8888)'
+					sh 'echo $(/usr/bin/curl localhost:8888)'
 				 }
 				}
 	        }
 	   }
 	   stage('Run Image') {
 	        steps {
-	        sh 'docker run -d -p 5000:5000 --name hellodocker payalsasmal/hellodocker:v1'
+	        sh 'docker run -d -p 5000:5000 --name hellodocker hellodocker:v1'
 	        }
 	   }
 	   
