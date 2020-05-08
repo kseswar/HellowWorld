@@ -1,7 +1,5 @@
 pipeline {
-	agent {
-		docker {image 'payalsasmal/1strepository:v1' }
-	}
+	agent any
 	    stages {
 	        stage('Clone Repository') {
 	        /* Cloning the repository to our workspace */
