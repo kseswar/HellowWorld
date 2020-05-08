@@ -1,6 +1,6 @@
 pipeline {
 	agent {
-		docker {image 'payalsasmal/1strepotory:v1' }
+		docker {image 'payalsasmal/1strepository:v1' }
 	}
 	    stages {
 	        stage('Clone Repository') {
