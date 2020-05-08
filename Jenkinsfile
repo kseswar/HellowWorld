@@ -1,6 +1,6 @@
 pipeline {
-	agent any  
-	stages {
+	agent any
+	    stages {
 	        stage('Clone Repository') {
 	        /* Cloning the repository to our workspace */
 	        steps {
@@ -24,7 +24,7 @@ pipeline {
 	   }
 	   
 	   stage('Push Docker image') {
-			steps'
+			steps {
 				withCredentials([string(credentialsId: 'dockerhubaccount', variable: 'dockerhubaccount')]) {
 					sh 'docker login -u payalsasmal -p ${dockerhubaccount}'
 					sh 'docker tag helloworld payalsasmal/1strepository:v1'
