@@ -1,8 +1,4 @@
 pipeline {
-    environment {
-    registry = "payalsasmal/1strepository"
-    registryCredential = 'DockerHub'
-	}
 	agent any
 	    stages {
 	        stage('Clone Repository') {
@@ -35,7 +31,7 @@ pipeline {
 	   stage('Push Docker image') {
 	        steps {
                    script {
-		      docker.withRegistry('https://hub.docker.com/', registryCredential) {
+		      withDockerRegistry([credentialsId: 'DockerHub', url: 'https://hub.docker.com/']) {
 			     app.push("${env.BUILD_NUMBER}")
 			     app.push("latest")
 			   }
