@@ -2,42 +2,36 @@ pipeline {
 	agent any
 	    stages {
 	        stage('Clone Repository') {
+	        /* Cloning the repository to our workspace */
 	        steps {
 	        checkout scm
 	        }
 	   }
-	   stage('Build Docker Image') {
+	   stage('Build Image') {
 	        steps {
-				script {
-				 app = docker.build('hellodocker')
-				 app.inside {
-					sh 'echo $(curl localhost:8888)'
-				 }
-				}
+	        sh 'docker build -t helloworld:v1 .'
 	        }
 	   }
 	   stage('Run Image') {
 	        steps {
-	        sh 'docker run -d -p 5000:5000 --name hellodocker hellodocker'
+	        sh 'docker run -d -p 5000:5000 --name helloworldpip helloworld:v1'
 	        }
 	   }
-	   
-	   stage('Testing') {
+	   stage('Testing'){
 	        steps {
 	            echo 'Testing..'
 	            }
 	   }
 	   
 	   stage('Push Docker image') {
-	        steps {
-                   script {
-		      withDockerRegistry([credentialsId: 'DockerHub', url: 'https://hub.docker.com/']) {
-			     app.push("${env.BUILD_NUMBER}")
-			     app.push("latest")
-			   }
-			}	   
-	        }
-	   
-	   }
+			steps{
+				withCredentials([string(credentialsId: ‘dockerhubaccount’, variable: ‘dockerhubaccount’)]) {
+					sh 'docker login -u payalsasmal -p ${dockerhubaccount}'
+					sh 'docker tag helloworld payalsasmal/1strepository:v1
+					sh 'docker push payalsasmal/1strepository'
+			}
+		  }		
+
+		}
     }
 }
