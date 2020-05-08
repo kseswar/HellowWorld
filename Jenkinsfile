@@ -24,8 +24,8 @@ pipeline {
 	   }
 	   
 	   stage('Push Docker image') {
-			steps{
-				withCredentials([string(credentialsId: ‘dockerhubaccount’, variable: ‘dockerhubaccount’)]) {
+			steps'
+				withCredentials([string(credentialsId: 'dockerhubaccount', variable: 'dockerhubaccount')]) {
 					sh 'docker login -u payalsasmal -p ${dockerhubaccount}'
 					sh 'docker tag helloworld payalsasmal/1strepository:v1'
 					sh 'docker push payalsasmal/1strepository'
