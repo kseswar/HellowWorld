@@ -1,6 +1,5 @@
 pipeline {
-	agent any
-	    stages {
+	   stages {
 	        stage('Clone Repository') {
 	        /* Cloning the repository to our workspace */
 	        steps {
